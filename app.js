@@ -34,7 +34,7 @@ const llamaLocal = async (prompt) => {
     const answer = JSON.stringify(finalResponse)
 
     competitors.push(response.model)
-    answers.push(finalAnswer)
+    answers.push(answer)
 
     return answer;
 }
@@ -60,7 +60,7 @@ const firstResponse = async (prompt) => {
     const answer = JSON.stringify(finalResponse)
 
     competitors.push(response.model)
-    answers.push(finalAnswer)
+    answers.push(answer)
 
     return answer;
 }
@@ -185,9 +185,17 @@ async function run() {
     console.log(competitors)
 
     console.log(answers)
+
+    const mappedResponses = mapResponses(competitors, answers)
+
+    console.log(mappedResponses);
 }
 
 run()
+
+function mapResponses(arr1, arr2) {
+    return arr1.map((item, index) => [item, arr2[index]])
+}
 
 
 
