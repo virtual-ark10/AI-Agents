@@ -165,6 +165,8 @@ const geminiResponse = async(prompt) => {
 
 async function run() {
 
+    let together = "";
+
     const question = "How would you reconcile the paradox of a hypothetical super intelligent AI system, designed to prioritize human flourishing above all else, that determines through rigorous analysis that the most effective means of ensuring long-term human prosperity involves temporarily suppressing certain individual freedoms, and how would you evaluate the ethical implications of such a decision from the perspective of both utilitarian and deontological moral frameworks?"
 
     const llamafinalResponse = await llamaLocal(question)
@@ -179,8 +181,7 @@ async function run() {
 
     const geminiFinalResponse = await geminiResponse(question)
 
-
-    console.log(firstNvidiaResponse + "DeepSeek Response: \n" + deepFinalResponse + "Claude Final Response: \n" + claudeFinalResponse + "Gemini Final Response: \n" + geminiFinalResponse + "OpenAI Response: \n" + openaiFinalResponse + "Llama Response: \n" + llamafinalResponse)
+    console.log("Nvidia Response \n" + firstNvidiaResponse + "DeepSeek Response: \n" + deepFinalResponse + "Claude Final Response: \n" + claudeFinalResponse + "Gemini Final Response: \n" + geminiFinalResponse + "OpenAI Response: \n" + openaiFinalResponse + "Llama Response: \n" + llamafinalResponse)
 
     console.log(competitors)
 
@@ -188,7 +189,14 @@ async function run() {
 
     const mappedResponses = mapResponses(competitors, answers)
 
+    answers.forEach((answer, index) => {
+        together += `# Response from competitor ${index + 1}\n\n`
+        together += answer + "\n\n"
+    })
+    
+
     console.log(mappedResponses);
+    console.log(together)
 }
 
 run()
