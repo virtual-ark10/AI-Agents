@@ -13,7 +13,6 @@ const answers = [];
 
 let together = "";
 
-const question = "How would you reconcile the paradox of a hypothetical super intelligent AI system, designed to prioritize human flourishing above all else, that determines through rigorous analysis that the most effective means of ensuring long-term human prosperity involves temporarily suppressing certain individual freedoms, and how would you evaluate the ethical implications of such a decision from the perspective of both utilitarian and deontological moral frameworks?"
 
 
 //Create an instance of OpenAI client using OpenRouter with required configs
@@ -95,8 +94,8 @@ const deepseekResponse = async (prompt) => {
 const openaiResponse = async (prompt) => {
 
     const response = await openai.chat.completions.create({
-        //model: "openai/gpt-4.1-mini",
-        model: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
+        model: "openai/gpt-4.1-mini",
+        //model: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
         messages: [{
             role: "user",
             content: prompt
@@ -119,8 +118,8 @@ const openaiResponse = async (prompt) => {
 const claudeResponse = async (prompt) => {
 
     const response = await openai.chat.completions.create({
-        //model: "anthropic/claude-3.7-sonnet",
-        model: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
+        model: "anthropic/claude-3.7-sonnet",
+        //model: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
         messages: [{
             role: "user",
             content: prompt
@@ -144,8 +143,8 @@ const claudeResponse = async (prompt) => {
 const geminiResponse = async(prompt) => {
 
     const response = await openai.chat.completions.create({
-        //model: "google/gemini-2.5-pro-preview-05-06",
-        model: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
+        model: "google/gemini-2.5-pro-preview-05-06",
+        //model: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
         messages: [{
             role: "user",
             content: prompt
@@ -188,6 +187,12 @@ const judgeResponse = (q, comp, both) => {
 
 
 async function run() {
+
+    //const question = "Act as a performance marketing expert. I'm preparing a digital launch for a new mindfulness mobile app targeting Gen Z users. Using the RACE framework (Reach, Act, Convert, Engage), outline a campaign strategy. For each stage, include: One creative marketing idea tailored to Gen Z behavior A recommended platform or tool (e.g., TikTok, email, push notifications) A performance metric to evaluate success Also, suggest one way to make the user journey feel more personalized or emotionally resonant."
+    
+    //const question = "How would you reconcile the paradox of a hypothetical super intelligent AI system, designed to prioritize human flourishing above all else, that determines through rigorous analysis that the most effective means of ensuring long-term human prosperity involves temporarily suppressing certain individual freedoms, and how would you evaluate the ethical implications of such a decision from the perspective of both utilitarian and deontological moral frameworks?"
+
+    const question = "which one came first: chicken or egg?"
 
     const llamafinalResponse = await llamaLocal(question)
     
@@ -233,8 +238,10 @@ async function run() {
 
     console.log("\n🏁 Final Judgement:\n", judgeAnswer);
 
-    return judgeAnswer;
+    // return judgeAnswer;
 
+    mapJudgeLLM(judgeAnswer)
+    
 }
 
 run()
@@ -242,6 +249,17 @@ run()
 
 function mapResponses(arr1, arr2) {
     return arr1.map((item, index) => [item, arr2[index]])
+}
+
+function mapJudgeLLM(judgeAnswer) {
+    const resultsObject = JSON.parse(judgeAnswer)
+    const ranks = resultsObject["results"]
+
+    ranks.forEach((result, index) => {
+        const competitor = competitors[parseInt(result) - 1];
+        console.log(`Rank ${index + 1}: ${competitor}`)
+    })
+
 }
 
 
